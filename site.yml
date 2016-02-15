@@ -1,0 +1,19 @@
+---
+
+- hosts: all
+  gather_facts: no
+  sudo: yes
+  roles:
+
+
+- hosts: manager_servers
+  gather_facts: no
+  sudo: yes
+  roles:
+    - { role: nagios, tags: nagios, when: ("manager_servers") in group_names }
+
+- hosts: agent_servers
+  gather_facts: no
+  sudo: yes
+  roles:
+    - { role: nrpe, tags: nrpe, when: ("agent_servers") in group_names }

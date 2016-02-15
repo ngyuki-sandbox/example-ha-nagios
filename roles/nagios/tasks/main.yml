@@ -1,0 +1,24 @@
+---
+
+- yum: name={{ item }}
+  tags: yum
+  with_items:
+    - epel-release
+
+- yum: name={{ item }}
+  tags: yum
+  with_items:
+    - nagios
+    - nagios-plugins-all
+    - nagios-plugins-nrpe
+
+- copy: src={{ item }} dest=/etc/nagios/conf.d/
+  with_fileglob:
+    - conf.d/*.cfg
+  notify:
+    - nagios check
+    - nagios restart
+
+- service: name=nagios state=started enabled=yes
+
+- service: name=httpd state=started enabled=yes

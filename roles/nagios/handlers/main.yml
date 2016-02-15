@@ -1,0 +1,7 @@
+---
+
+- name: nagios check
+  shell: nagios -v /etc/nagios/nagios.cfg
+
+- name: nagios restart
+  service: name=nagios state=restarted

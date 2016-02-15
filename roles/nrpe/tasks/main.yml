@@ -1,0 +1,46 @@
+---
+
+- yum: name={{ item }}
+  tags: yum
+  with_items:
+    - epel-release
+
+- yum: name={{ item }}
+  tags: yum
+  with_items:
+    - nrpe
+    - nagios-plugins-all
+
+- copy: src={{ item }} dest=/etc/nrpe.d/
+  with_fileglob:
+    - nrpe.d/*.cfg
+  notify:
+    - nrpe restart
+
+- file: path=/etc/nagios/plugins.d/ state=directory
+
+- get_url: dest=/etc/nagios/plugins.d/check_mem.pl mode=0755
+    url=https://raw.githubusercontent.com/justintime/nagios-plugins/master/check_mem/check_mem.pl
+
+- service: name=nrpe state=started enabled=yes
+
+###
+
+- yum: name={{ item }}
+  tags: yum
+  with_items:
+    - chrony
+
+- lineinfile:
+    dest: /etc/chrony.conf
+    regexp: "^server "
+    line: "server 192.168.2.2 iburst"
+
+- lineinfile:
+    dest: /etc/chrony.conf
+    regexp: |-
+      ^server \d\.centos\.
+    state: absent
+
+- service: name=chronyd state=started enabled=yes
+
