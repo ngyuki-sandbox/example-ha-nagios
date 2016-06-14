@@ -10,12 +10,17 @@
   with_items:
     - nrpe
     - nagios-plugins-all
+    - nsca-client
 
 - copy: src={{ item }} dest=/etc/nrpe.d/
   with_fileglob:
     - nrpe.d/*.cfg
   notify:
     - nrpe restart
+
+- copy: src={{ item }} dest=/etc/nagios/ mode=0600
+  with_fileglob:
+    - send_nsca.cfg
 
 - file: path=/etc/nagios/plugins.d/ state=directory
 

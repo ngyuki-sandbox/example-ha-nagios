@@ -11,6 +11,7 @@
     - nagios
     - nagios-plugins-all
     - nagios-plugins-nrpe
+    - nsca
 
 - copy: src={{ item }} dest=/etc/nagios/conf.d/
   with_fileglob:
@@ -19,6 +20,21 @@
     - nagios check
     - nagios restart
 
+- copy: src={{ item }} dest=/etc/nagios/objects/
+  with_fileglob:
+    - objects/*.cfg
+  notify:
+    - nagios check
+    - nagios restart
+
+- copy: src={{ item }} dest=/etc/nagios/ mode=600
+  with_fileglob:
+    - nsca.cfg
+  notify:
+    - nsca restart
+
 - service: name=nagios state=started enabled=yes
+
+- service: name=nsca state=started enabled=yes
 
 - service: name=httpd state=started enabled=yes
