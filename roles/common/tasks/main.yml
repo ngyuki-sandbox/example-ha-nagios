@@ -1,0 +1,20 @@
+---
+
+- yum: name={{ item }}
+  tags: yum
+  with_items:
+    - epel-release
+    - chrony
+
+- lineinfile:
+    dest: /etc/chrony.conf
+    regexp: "^server "
+    line: "server 192.168.2.2 iburst"
+
+- lineinfile:
+    dest: /etc/chrony.conf
+    regexp: |-
+      ^server \d\.centos\.
+    state: absent
+
+- service: name=chronyd state=started enabled=yes

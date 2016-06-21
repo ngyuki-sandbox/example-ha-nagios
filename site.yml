@@ -4,16 +4,16 @@
   gather_facts: no
   sudo: yes
   roles:
+    - { role: common, tags: common }
 
-
-- hosts: manager_servers
+- hosts: nagios_servers
   gather_facts: no
   sudo: yes
   roles:
-    - { role: nagios, tags: nagios, when: ("manager_servers") in group_names }
+    - { role: nagios, tags: nagios }
 
-- hosts: agent_servers
+- hosts: target_servers
   gather_facts: no
   sudo: yes
   roles:
-    - { role: nrpe, tags: nrpe, when: ("agent_servers") in group_names }
+    - { role: nrpe, tags: nrpe }

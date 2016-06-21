@@ -1,0 +1,9 @@
+[nagios_servers]
+ng01  ansible_ssh_host=192.168.33.21
+ng02  ansible_ssh_host=192.168.33.22
+
+[target_servers]
+sv01  ansible_ssh_host=192.168.33.11
+
+[proxy_servers]
+proxy ansible_ssh_host=192.168.33.10

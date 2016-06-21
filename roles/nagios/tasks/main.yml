@@ -3,11 +3,6 @@
 - yum: name={{ item }}
   tags: yum
   with_items:
-    - epel-release
-
-- yum: name={{ item }}
-  tags: yum
-  with_items:
     - nagios
     - nagios-plugins-all
     - nagios-plugins-nrpe
@@ -18,23 +13,13 @@
     - conf.d/*.cfg
   notify:
     - nagios check
-    - nagios restart
 
 - copy: src={{ item }} dest=/etc/nagios/objects/
   with_fileglob:
     - objects/*.cfg
   notify:
     - nagios check
-    - nagios restart
 
 - copy: src={{ item }} dest=/etc/nagios/ mode=600
   with_fileglob:
     - nsca.cfg
-  notify:
-    - nsca restart
-
-- service: name=nagios state=started enabled=yes
-
-- service: name=nsca state=started enabled=yes
-
-- service: name=httpd state=started enabled=yes
